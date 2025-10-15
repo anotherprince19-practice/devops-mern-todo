@@ -1,0 +1,35 @@
+version: '3.8' # Specify the Docker Compose file format version
+
+services:
+  # MongoDB service
+  mongo:
+    image: mongo:latest # Use the official MongoDB image
+    ports:
+      - '27017:27017' # Map host port 27017 to container port 27017
+    volumes:
+      - mongo-data:/data/db # Persist MongoDB data using a named volume
+
+  # Backend service (Node.js with Express)
+  backend:
+    build: ./backend # Build the image from the Dockerfile in the 'backend' directory
+    ports:
+      - '5000:5000' # Map host port 5000 to container port 5000
+    environment:
+      MONGO_URI: mongodb://mongo:27017/mern_db # MongoDB connection string
+    depends_on:
+      - mongo # Ensure MongoDB starts before the backend
+    volumes:
+      - ./backend:/usr/src/app # Mount the backend code for development (optional)
+
+  # Frontend service (React)
+  frontend:
+    build: ./frontend # Build the image from the Dockerfile in the 'frontend' directory
+    ports:
+      - '3000:3000' # Map host port 3000 to container port 3000
+    depends_on:
+      - backend # Ensure backend starts before the frontend (optional, for some setups)
+    volumes:
+      - ./frontend:/usr/src/app # Mount the frontend code for development (optional)
+
+volumes:
+  mongo-data: # Define the named volume for MongoDB data persistence
