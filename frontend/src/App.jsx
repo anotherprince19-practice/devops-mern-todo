@@ -42,7 +42,7 @@ function App() {
         {tasks.map(task => (
           <li key={task._id}>
             {task.text}
-            <button onClick={() => deleteTask(task._id)}>❌</button>
+            <button onClick={() => deleteTask(task._id)}>Delete</button>
           </li>
         ))}
       </ul>
