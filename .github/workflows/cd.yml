@@ -1,8 +1,10 @@
 name: MERN CD
 
 on:
-  push: 
-    branches: [main]
+  workflow_run:
+    workflows: ["MERN CI"] # Name of your CI workflow
+    types:
+      - completed
 
 jobs:
   deploy:
